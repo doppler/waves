@@ -48,27 +48,21 @@ const App = () => {
     <div id="App">
       <svg width={width} height={height}>
         <Grid dimensions={dimensions} />
-        {Array.from({ length: Math.ceil((width * GridSpacing) / 4) }).map(
-          (_, i) => {
-            x = x + GridSpacing / 4;
-            return (
-              <>
-                <circle
-                  cx={x}
-                  cy={center.y + (height / 2) * Math.cos(x)}
-                  r={5}
-                  style={{ stroke: "hsl(120, 100%, 50%" }}
-                />
-                <circle
-                  cx={x}
-                  cy={center.y + (height / 2) * Math.cos(x * 2)}
-                  r={5}
-                  style={{ stroke: "hsl(120, 100%, 50%" }}
-                />
-              </>
-            );
-          }
-        )}
+        {Array.from({
+          length: Math.floor(width / GridSpacing) * 5 + GridSpacing
+        }).map((_, i) => {
+          x = x + GridSpacing / 5;
+          return (
+            <circle
+              cx={x}
+              cy={
+                center.y + (height / 2) * Math.sin((Math.PI * 2) / (width / x))
+              }
+              r={2}
+              style={{ stroke: "hsl(120, 100%, 50%" }}
+            />
+          );
+        })}
       </svg>
     </div>
   );
