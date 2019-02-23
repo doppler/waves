@@ -6,46 +6,24 @@ const screenDimensions = () => ({
   height: window.innerHeight
 });
 
-const Grid = props => {
-  const { center, width, height, GridSpacing } = props;
-  let x = 0 - GridSpacing + (center.x % GridSpacing);
-  let y = 0 - GridSpacing + (center.y % GridSpacing);
-  return (
-    <g id="grid">
-      {Array.from({ length: Math.ceil(width / GridSpacing) }).map((_, i) => {
-        x = x + GridSpacing;
-        return (
-          <line key={i} className="gline" x1={x} y1={0} x2={x} y2={height} />
-        );
-      })}
-      {Array.from({ length: Math.ceil(height / GridSpacing) }).map((_, i) => {
-        y = y + GridSpacing;
-        return (
-          <line className="gline" key={i} x1={0} y1={y} x2={width} y2={y} />
-        );
-      })}
-    </g>
-  );
-};
-
 const App = () => {
   const [dimensions, setDimensions] = useState(screenDimensions());
   const { width, height } = dimensions;
   const center = { x: width / 2, y: height / 2 };
   const GridSpacing = width / 21;
   const SubSpacing = 10;
-  const [xoffset, setXoffset] = useState(0);
-  const MaxOffset = width / (GridSpacing / SubSpacing);
+  const [pi2multiplier, setPi2multiplier] = useState(21);
+  const MaxPi2Multiplier = width / (GridSpacing / SubSpacing);
   useEffect(() => {
     requestAnimationFrame(() => {
-      setXoffset(
-        xoffset > MaxOffset
+      setPi2multiplier(
+        pi2multiplier > MaxPi2Multiplier
           ? 0
-          : xoffset +
+          : pi2multiplier +
               ((Math.PI * 2) / ((width / GridSpacing) * SubSpacing)) * 0.25
       );
     });
-  }, [xoffset]);
+  }, [pi2multiplier]);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -55,26 +33,42 @@ const App = () => {
 
   return (
     <div id="App">
-      <span className="percentage">{`${Number(
-        (xoffset / MaxOffset) * 100
-      ).toFixed(2)}%`}</span>
+      <span className="percentage">
+        pi2multiplier={pi2multiplier.toFixed(8)} percentage=
+        {Number((pi2multiplier / MaxPi2Multiplier) * 100).toFixed(8)}}%
+      </span>
       <svg width={width} height={height}>
-        <Grid {...{ width, height, GridSpacing, center }} />
         {Array.from({
           length: Math.floor(width / GridSpacing) * SubSpacing + GridSpacing
         }).map((_, i) => {
           let x = (i * GridSpacing) / SubSpacing;
-          let rotationFactor = Math.sin((Math.PI * 2 * xoffset) / (width / x));
+          let rotationFactor = Math.sin(
+            (Math.PI * 2 * pi2multiplier) / (width / x)
+          );
+          let y = center.y + (height / 2) * rotationFactor;
+          const color = -180 * rotationFactor;
+          const strokeOpacity = 1 * ((i % SubSpacing) / SubSpacing);
           return (
-            <circle
-              key={i}
-              cx={x}
-              cy={center.y + (height / 2) * rotationFactor}
-              r={(i % SubSpacing) + 2}
-              style={{
-                fill: `hsla(${-180 * rotationFactor}, 100%, 50%)`
-              }}
-            />
+            <>
+              <line
+                x1={x}
+                y1={y}
+                x2={x}
+                y2={0}
+                style={{
+                  stroke: `hsla(${color}, 100%, 50%, ${strokeOpacity})`
+                }}
+              />
+              <circle
+                key={i}
+                cx={x}
+                cy={y}
+                r={2}
+                style={{
+                  fill: `hsla(${color}, 100%, 50%)`
+                }}
+              />
+            </>
           );
         })}
       </svg>
