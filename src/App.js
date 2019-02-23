@@ -64,18 +64,15 @@ const App = () => {
           length: Math.floor(width / GridSpacing) * SubSpacing + GridSpacing
         }).map((_, i) => {
           let x = (i * GridSpacing) / SubSpacing;
+          let rotationFactor = Math.sin((Math.PI * 2 * xoffset) / (width / x));
           return (
             <circle
               key={i}
               cx={x}
-              cy={
-                center.y +
-                (height / 2) * Math.sin((Math.PI * 2 * xoffset) / (width / x))
-              }
+              cy={center.y + (height / 2) * rotationFactor}
               r={2}
               style={{
-                fill: `hsla(${-180 *
-                  Math.sin((Math.PI * 2 * xoffset) / (width / x))}, 100%, 50%)`
+                fill: `hsla(${-180 * rotationFactor}, 100%, 50%)`
               }}
             />
           );
