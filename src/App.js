@@ -35,7 +35,7 @@ const App = () => {
   const GridSpacing = width / 21;
   const SubSpacing = 10;
   const [xoffset, setXoffset] = useState(0);
-  const MaxOffset = width / (GridSpacing / 10);
+  const MaxOffset = width / (GridSpacing / SubSpacing);
   useEffect(() => {
     requestAnimationFrame(() => {
       setXoffset(
