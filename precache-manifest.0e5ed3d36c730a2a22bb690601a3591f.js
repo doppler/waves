@@ -16,7 +16,7 @@ self.__precacheManifest = [
     "url": "/waves/static/js/2.57a5c759.chunk.js"
   },
   {
-    "revision": "db0bbe693f9fd264b1f53f8ed09de0d5",
+    "revision": "b9e6872f1cbbdec15cccf2ac316af84a",
     "url": "/waves/index.html"
   }
 ];
