@@ -70,7 +70,7 @@ const App = () => {
               key={i}
               cx={x}
               cy={center.y + (height / 2) * rotationFactor}
-              r={i % SubSpacing}
+              r={(i % SubSpacing) + 2}
               style={{
                 fill: `hsla(${-180 * rotationFactor}, 100%, 50%)`
               }}
