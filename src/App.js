@@ -6,11 +6,8 @@ const screenDimensions = () => ({
   height: window.innerHeight
 });
 
-const GridSpacing = 50;
-
 const Grid = props => {
-  const { width, height } = props.dimensions;
-  const center = { x: width / 2, y: height / 2 };
+  const { center, width, height, GridSpacing } = props;
   let x = 0 - GridSpacing + (center.x % GridSpacing);
   let y = 0 - GridSpacing + (center.y % GridSpacing);
   return (
@@ -35,8 +32,20 @@ const App = () => {
   const [dimensions, setDimensions] = useState(screenDimensions());
   const { width, height } = dimensions;
   const center = { x: width / 2, y: height / 2 };
-  let x = 0 - GridSpacing + (center.x % GridSpacing);
-  // let y = 0 - GridSpacing + (center.y % GridSpacing);
+  const GridSpacing = width / 21;
+  const SubSpacing = 10;
+  const [xoffset, setXoffset] = useState(0);
+  const MaxOffset = width / (GridSpacing / 10);
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      setXoffset(
+        xoffset > MaxOffset
+          ? 0
+          : xoffset +
+              ((Math.PI * 2) / ((width / GridSpacing) * SubSpacing)) * 0.25
+      );
+    });
+  }, [xoffset]);
 
   useEffect(() => {
     window.addEventListener("resize", () => {
@@ -46,20 +55,28 @@ const App = () => {
 
   return (
     <div id="App">
+      <span className="percentage">{`${Number(
+        (xoffset / MaxOffset) * 100
+      ).toFixed(2)}%`}</span>
       <svg width={width} height={height}>
-        <Grid dimensions={dimensions} />
+        <Grid {...{ width, height, GridSpacing, center }} />
         {Array.from({
-          length: Math.floor(width / GridSpacing) * 5 + GridSpacing
+          length: Math.floor(width / GridSpacing) * SubSpacing + GridSpacing
         }).map((_, i) => {
-          x = x + GridSpacing / 5;
+          let x = (i * GridSpacing) / SubSpacing;
           return (
             <circle
+              key={i}
               cx={x}
               cy={
-                center.y + (height / 2) * Math.sin((Math.PI * 2) / (width / x))
+                center.y +
+                (height / 2) * Math.sin((Math.PI * 2 * xoffset) / (width / x))
               }
               r={2}
-              style={{ stroke: "hsl(120, 100%, 50%" }}
+              style={{
+                fill: `hsla(${-180 *
+                  Math.sin((Math.PI * 2 * xoffset) / (width / x))}, 100%, 50%)`
+              }}
             />
           );
         })}

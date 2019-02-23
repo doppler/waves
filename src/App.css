@@ -1,14 +1,19 @@
 #App {
-  font-family: monospace;
   height: 100vh;
-  color: hsl(120, 100%, 50%);
 }
 
 svg {
-  background-color: hsl(120, 100%, 5%);
+  background-color: black;
 }
 
 svg g#grid line.gline {
-  stroke: hsla(120, 100%, 50%, 0.5);
-  stroke-width: 1;
+  stroke: rgba(255, 255, 255, 0.25);
+}
+
+span.percentage {
+  font-family: monospace;
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  color: white;
 }
