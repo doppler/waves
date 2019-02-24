@@ -17,3 +17,10 @@ span.percentage {
   bottom: 0;
   color: white;
 }
+
+input#percentage-slider {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  width: 100%;
+}
