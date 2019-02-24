@@ -103,14 +103,14 @@ const App = () => {
           );
           let y = center.y + (height / 2) * rotationFactor;
           const color = -180 * rotationFactor;
-          const strokeOpacity = 1 * ((i % SubSpacing) / SubSpacing);
+          const strokeOpacity = 1; //* ((i % SubSpacing) / SubSpacing);
           return (
             <g key={i}>
               <line
                 x1={x}
                 y1={y}
                 x2={x}
-                y2={0}
+                y2={height}
                 style={{
                   stroke: `hsla(${color}, 100%, 50%, ${strokeOpacity})`
                 }}
